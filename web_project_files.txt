@@ -1,0 +1,189 @@
+# index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Planner Online</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Study Planner Online</h1>
+
+        <div class="task-form">
+            <input type="text" id="taskName" placeholder="Nama Tugas">
+            <input type="date" id="taskDeadline">
+            <select id="taskPriority">
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+            </select>
+            <button onclick="addTask()">Tambah Tugas</button>
+        </div>
+
+        <div class="task-controls">
+            <button onclick="sortByDeadline()">Sort by Deadline</button>
+            <button onclick="sortByPriority()">Sort by Priority</button>
+        </div>
+
+        <ul id="taskList"></ul>
+
+        <div class="ai-box">
+            <h3>Dapatkan Saran AI</h3>
+            <textarea id="aiInput" placeholder="Masukkan daftar tugas..."></textarea>
+            <button onclick="getAiSuggestion()">Minta Saran</button>
+            <p id="aiResult"></p>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+
+# style.css
+body {
+    font-family: Arial, sans-serif;
+    background: #f7f7f7;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 600px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.task-form input, .task-form select {
+    padding: 10px;
+    margin-right: 5px;
+    margin-bottom: 10px;
+    width: 30%;
+}
+
+button {
+    padding: 10px 15px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #0056b3;
+}
+
+#taskList li {
+    background: #e9e9e9;
+    padding: 10px;
+    margin-top: 8px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ai-box textarea {
+    width: 100%;
+    height: 80px;
+    margin-bottom: 10px;
+}
+
+
+# script.js
+let tasks = [];
+
+function addTask() {
+    let name = document.getElementById("taskName").value;
+    let deadline = document.getElementById("taskDeadline").value;
+    let priority = document.getElementById("taskPriority").value;
+
+    if (!name || !deadline) {
+        alert("Isi semua data tugas!");
+        return;
+    }
+
+    tasks.push({ name, deadline, priority, done: false });
+    renderTasks();
+}
+
+function renderTasks() {
+    let list = document.getElementById("taskList");
+    list.innerHTML = "";
+
+    tasks.forEach((t, i) => {
+        list.innerHTML += `
+            <li>
+                <span>${t.name} - ${t.deadline} - ${t.priority}</span>
+                <div>
+                    <button onclick="toggleDone(${i})">✔</button>
+                    <button onclick="deleteTask(${i})" style="background:red">✖</button>
+                </div>
+            </li>`;
+    });
+}
+
+function toggleDone(index) {
+    tasks[index].done = !tasks[index].done;
+    renderTasks();
+}
+
+function deleteTask(index) {
+    tasks.splice(index, 1);
+    renderTasks();
+}
+
+function sortByDeadline() {
+    tasks.sort((a, b) => new Date(a.deadline) - new Date(b.deadline));
+    renderTasks();
+}
+
+function sortByPriority() {
+    const order = { High: 1, Medium: 2, Low: 3 };
+    tasks.sort((a, b) => order[a.priority] - order[b.priority]);
+    renderTasks();
+}
+
+function getAiSuggestion() {
+    let input = document.getElementById("aiInput").value;
+    if (!input.trim()) {
+        alert("Masukkan data tugas!");
+        return;
+    }
+
+    document.getElementById("aiResult").innerText = "(Contoh AI) Prioritaskan tugas dengan deadline terdekat dan tingkat kesulitan tertinggi.";
+}
+
+
+# README.md
+# Study Planner Online
+
+## Latar Belakang
+Siswa sering kesulitan mengatur tugas dan jadwal belajar. Website ini dibuat untuk membantu mengorganisir tugas, deadline, dan prioritas dengan mudah.
+
+## Manfaat
+- Mengatur tugas lebih mudah
+- Mengurangi stres
+- Membantu manajemen waktu
+- Memberi saran otomatis dengan bantuan AI
+
+## Cara Menggunakan
+1. Buka halaman website
+2. Masukkan nama tugas, deadline, dan prioritas
+3. Klik "Tambah Tugas"
+4. Lihat daftar tugas yang muncul
+5. Gunakan fitur Sort untuk mengurutkan
+6. Gunakan fitur AI untuk saran otomatis
+
+## Teknologi
+- HTML
+- CSS
+- JavaScript
+- GitHub Pages
